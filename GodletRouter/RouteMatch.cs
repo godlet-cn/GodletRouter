@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GodletRouter
 {
-    class RouteMatch
+    // RouteMatch stores information about a matched route.
+    public class RouteMatch
     {
-        public IHttpHandler Handler { get; internal set; }
+        public Route Route { get; set; }
+
+        public IHttpHandler Handler { get; set; }
+
+        public Dictionary<string, string> Vars { get; set; }
+
+        public Exception MatchErr { get; set; }
     }
 }

@@ -43,6 +43,7 @@
     <Compile Include="DefaultNotFoundHandler.cs" />
     <Compile Include="HttpRouter.cs" />
     <Compile Include="IHttpHandler.cs" />
+    <Compile Include="IMiddleWare.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Route.cs" />
     <Compile Include="RouteMatch.cs" />

@@ -43,9 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\HomeHttpHandler.cs" />
+    <Compile Include="Handlers\PageErrorHandler.cs" />
+    <Compile Include="Handlers\TestChildHttpHandler.cs" />
+    <Compile Include="Handlers\TestPostHttpHandler.cs" />
     <Compile Include="HttpServer.cs" />
+    <Compile Include="MiddleWares\LogMiddleWare.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Handlers\TestGetHttpHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GodletRouter\GodletRouter.csproj">

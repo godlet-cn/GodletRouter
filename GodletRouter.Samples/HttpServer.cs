@@ -1,46 +1,82 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GodletRouter.Samples
 {
-    class HttpServer
+    public class HttpServer
     {
         private HttpRouter router;
+
         private HttpListener httpListener;
 
-        public void Start()
+        /// <summary>
+        /// Start http server
+        /// </summary>
+        public void Start(string hostname,int port)
         {
-            string conn = getConnectionString("localhost", 4006);
+            string conn = getConnectionString(hostname, port);
             try
             {
+                Console.WriteLine("Initializing HTTP server");
+                Console.WriteLine("Listening at:" + conn);
+
                 httpListener = new HttpListener();
                 httpListener.Prefixes.Add(conn);
                 httpListener.Start();
                 httpListener.BeginGetContext(new AsyncCallback(getContextCallBack), httpListener);
-                Console.WriteLine("Initializing HTTP server");
-                Console.WriteLine("Listening at:" + conn);
 
                 router = new HttpRouter();
-                router.HandleFunc("/test", this.HandleTest);
             }
             catch (Exception err)
             {
-                Console.WriteLine("Fatal:err start server:" + err.Message + " " + err.StackTrace);
+                Console.Error.WriteLine("Failed to start server:" + err.Message + " " + err.StackTrace);
             }
         }
 
+        /// <summary>
+        /// Stop http server
+        /// </summary>
         public void Stop()
         {
             httpListener.Stop();
         }
 
-        private void HandleTest(HttpListenerRequest request, HttpListenerResponse response)
+        /// <summary>
+        /// Bind a http handler
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="handler"></param>
+        /// <param name="method"></param>
+        public void AddHandler(string path,IHttpHandler handler,string method)
         {
+            router.HandleFunc(path, handler.Service);
+        }
 
+        /// <summary>
+        /// Add middlewares for this handlers
+        /// </summary>
+        /// <param name="middleWares"></param>
+        public void AddMiddleWares(params IMiddleWare[] middleWares)
+        {
+            router.Use(middleWares);
+        }
+
+        /// <summary>
+        /// Set home page handler
+        /// </summary>
+        /// <param name="handler"></param>
+        public void SetHomePageHandler(IHttpHandler handler)
+        {
+            router.HomeHandler = handler;
+        }
+
+        /// <summary>
+        /// Set page error handler
+        /// </summary>
+        /// <param name="handler"></param>
+        public void SetPageErrorHandler(IHttpHandler handler)
+        {
+            router.NotFoundHandler = handler;
         }
 
         /// <summary>

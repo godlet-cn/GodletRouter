@@ -9,31 +9,31 @@ namespace GodletRouter
         public HttpRouter()
         {
             routes = new List<Route>();
+            middleWares = new List<IMiddleWare>();
 
             this.NotFoundHandler = new DefaultNotFoundHandler();
         }
+
+        public IHttpHandler HomeHandler { get; set; }
 
         public IHttpHandler NotFoundHandler { get; set; }
 
         private List<Route> routes;
 
-        #region ===Use MiddleWare===
+        private List<IMiddleWare> middleWares;
 
-        private event MiddleWareFunc middleWares;
-
-        public void Use(params MiddleWareFunc[] mws)
+        #region MiddleWares
+        
+        /// <summary>
+        /// Appends middlewares to the chain.
+        /// Middlewares are executed in the order that they are applied to the Router.
+        /// </summary>
+        /// <param name="mws"></param>
+        public void Use(params IMiddleWare[] mws)
         {
             foreach (var mw in mws)
             {
-                this.middleWares += mw;
-            }
-        }
-
-        public void Use(params IHttpHandler[] mws)
-        {
-            foreach (var mw in mws)
-            {
-                this.middleWares += mw.Service;
+                this.middleWares.Add(mw);
             }
         }
 
@@ -52,8 +52,21 @@ namespace GodletRouter
             return route;
         }
 
+        /// <summary>
+        /// HttpRouter.Service dispatches the handler registered in the matched route.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public void Service(HttpListenerRequest request, HttpListenerResponse response)
         {
+            if (request.Url.AbsolutePath.Equals("/"))
+            {
+                if (HomeHandler != null)
+                {
+                    HomeHandler.Service(request, response);
+                }
+            }
+
             RouteMatch match = new RouteMatch();
             IHttpHandler handler = null;
 
@@ -74,6 +87,21 @@ namespace GodletRouter
 
         private bool Match(HttpListenerRequest request, RouteMatch match)
         {
+            foreach (var route in this.routes)
+            {
+                if (route.Match(request, match))
+                {
+                    // Build middleware chain if no error was found
+                    if (match.MatchErr == null)
+                    {
+                        foreach (var mw in this.middleWares)
+                        {
+                            match.Handler = mw.Middleware(match.Handler);
+                        }
+                    }
+                    return true;
+                }
+            }
             return false;
         }
     }
