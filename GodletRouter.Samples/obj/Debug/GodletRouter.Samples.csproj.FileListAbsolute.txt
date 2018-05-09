@@ -1,7 +1,0 @@
-E:\MyProject\raft\GodletRouter\GodletRouter.Samples\bin\Debug\GodletRouter.Samples.exe
-E:\MyProject\raft\GodletRouter\GodletRouter.Samples\bin\Debug\GodletRouter.Samples.pdb
-E:\MyProject\raft\GodletRouter\GodletRouter.Samples\bin\Debug\GodletRouter.dll
-E:\MyProject\raft\GodletRouter\GodletRouter.Samples\bin\Debug\GodletRouter.pdb
-E:\MyProject\raft\GodletRouter\GodletRouter.Samples\obj\Debug\GodletRouter.Samples.csprojResolveAssemblyReference.cache
-E:\MyProject\raft\GodletRouter\GodletRouter.Samples\obj\Debug\GodletRouter.Samples.exe
-E:\MyProject\raft\GodletRouter\GodletRouter.Samples\obj\Debug\GodletRouter.Samples.pdb
