@@ -1,0 +1,10 @@
+E:\MyProject\raft\CSharpRaft\NetHttpRouter\bin\Debug\GodletRouter.dll
+E:\MyProject\raft\CSharpRaft\NetHttpRouter\bin\Debug\GodletRouter.pdb
+E:\MyProject\raft\CSharpRaft\NetHttpRouter\obj\Debug\GodletRouter.dll
+E:\MyProject\raft\CSharpRaft\NetHttpRouter\obj\Debug\GodletRouter.pdb
+E:\MyProject\raft\CSharpRaft\NetHttpRouter\obj\Debug\GodletRouter.csprojResolveAssemblyReference.cache
+E:\MyProject\raft\GodletRouter\bin\Debug\GodletRouter.dll
+E:\MyProject\raft\GodletRouter\bin\Debug\GodletRouter.pdb
+E:\MyProject\raft\GodletRouter\obj\Debug\GodletRouter.csprojResolveAssemblyReference.cache
+E:\MyProject\raft\GodletRouter\obj\Debug\GodletRouter.dll
+E:\MyProject\raft\GodletRouter\obj\Debug\GodletRouter.pdb
