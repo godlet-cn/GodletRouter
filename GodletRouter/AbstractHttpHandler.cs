@@ -90,6 +90,7 @@ namespace GodletRouter
 
         protected void WriteString(HttpListenerResponse resp,string responseString)
         {
+            if (resp.ContentLength64 != 0) return;
             resp.ContentLength64 = Encoding.UTF8.GetByteCount(responseString);
             resp.ContentType = "text/html; charset=UTF-8";
             Stream output = resp.OutputStream;

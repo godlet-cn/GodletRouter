@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GodletRouter
+﻿namespace GodletRouter
 {
     /// <summary>
     /// IMiddleWare receives an http.Handler and returns another http.Handler.

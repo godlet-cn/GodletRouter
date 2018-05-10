@@ -19,13 +19,13 @@ namespace GodletRouter
             {
                 Console.WriteLine("Initializing HTTP server");
                 Console.WriteLine("Listening at:" + conn);
-
+                router = new HttpRouter();
+                
                 httpListener = new HttpListener();
                 httpListener.Prefixes.Add(conn);
                 httpListener.Start();
-                httpListener.BeginGetContext(new AsyncCallback(getContextCallBack), httpListener);
 
-                router = new HttpRouter();
+                httpListener.BeginGetContext(new AsyncCallback(getContextCallBack), httpListener);
             }
             catch (Exception err)
             {
@@ -106,7 +106,7 @@ namespace GodletRouter
             }
             catch (Exception err)
             {
-                Console.WriteLine("Fatal:error handle client request:" + err.Message);
+                Console.Error.WriteLine("Fatal:error handle client request:" + err.Message+" "+err.StackTrace);
             }
         }
     }

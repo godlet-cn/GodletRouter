@@ -21,6 +21,8 @@ namespace GodletRouter
 
         private List<IMiddleWare> middleWares;
 
+        private object mutex = new object();
+
         #region MiddleWares
         
         /// <summary>
@@ -40,9 +42,12 @@ namespace GodletRouter
 
         public Route HandleFunc(string path, IHttpHandler handler)
         {
-            Route route = new Route(path, handler);
-            this.routes.Add(route);
-            return route;
+            lock (mutex)
+            {
+                Route route = new Route(path, handler);
+                this.routes.Add(route);
+                return route;
+            }
         }
 
         /// <summary>
@@ -105,17 +110,21 @@ namespace GodletRouter
             // Check for longest valid match.
             int maxLen = 0;
             IHttpHandler h=null;
-            foreach (var route in this.routes)
+
+            lock (mutex)
             {
-                if (!pathMatch(route.Pattern, path))
+                foreach (var route in this.routes)
                 {
-                    continue;
-                }
-                if (h == null || route.Pattern.Length > maxLen)
-                {
-                    maxLen = route.Pattern.Length;
-                    h = route.Handler;
-                    pattern = route.Pattern;
+                    if (!pathMatch(route.Pattern, path))
+                    {
+                        continue;
+                    }
+                    if (h == null || route.Pattern.Length > maxLen)
+                    {
+                        maxLen = route.Pattern.Length;
+                        h = route.Handler;
+                        pattern = route.Pattern;
+                    }
                 }
             }
         }
