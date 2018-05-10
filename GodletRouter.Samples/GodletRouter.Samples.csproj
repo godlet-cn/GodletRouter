@@ -46,7 +46,6 @@
     <Compile Include="Handlers\HomeHttpHandler.cs" />
     <Compile Include="Handlers\PageErrorHandler.cs" />
     <Compile Include="Handlers\TestChildHttpHandler.cs" />
-    <Compile Include="HttpServer.cs" />
     <Compile Include="MiddleWares\LogMiddleWare.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

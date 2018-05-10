@@ -43,6 +43,7 @@
     <Compile Include="AbstractHttpHandler.cs" />
     <Compile Include="DefaultNotFoundHandler.cs" />
     <Compile Include="HttpRouter.cs" />
+    <Compile Include="HttpServer.cs" />
     <Compile Include="IHttpHandler.cs" />
     <Compile Include="IMiddleWare.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace GodletRouter.Samples
+namespace GodletRouter
 {
     public class HttpServer
     {
