@@ -1,12 +1,9 @@
 # GodletRouter
-A HTTP URL router and dispatcher for .net. 
 
-
-## Get started ##
+## Introduction ##
 GodletRouter is a HTTP request multiplexer. It matches the URL of each incoming request against a list of registered patterns and calls the handler for the pattern that most closely matches the URL.
 
-GodletRouter provides a class `HttpServer`, which works over `HttpListener`. Clients can embed a `HttpServer` in their applications, which can be easily called by a browser or using a curl client.
-
+GodletRouter provides a class `HttpServer`, which works over `HttpListener`. Clients can embed a `HttpServer` in their applications, which can be easily called by a browser or a curl client.
 
 ## Samples ##
 
@@ -42,6 +39,7 @@ GodletRouter provides a class `HttpServer`, which works over `HttpListener`. Cli
         }
     }
 
+    //How to implement a http handler
     class TestHttpHandler : AbstractHttpHandler
     {
         protected override void doGet(HttpListenerRequest request, HttpListenerResponse response) {
@@ -66,24 +64,26 @@ GodletRouter provides a class `HttpServer`, which works over `HttpListener`. Cli
         }
     }
 
-When you run this application, you can try it now
+When you run this application, you can try it now:
 
-(1)Visit the home page
+
+1. Visit the home page
 
     curl http://localhost:4006
 
-(2)Test "Get" method 
+
+2. Test "Get" method 
 
     curl http://localhost:4006/test
 
-(3)Test "Post" method
+3. Test "Post" method
 
     curl -X POST http://localhost:4006/test/ -d 'FOO'
 
-(4)Test a subsidiary url request
+4. Test a subsidiary url request
 
     curl http://localhost:4006/test/child
 
-(5)Requst a unknown page
+5. Visit a unknown page
     
     curl http://localhost:4006/db
