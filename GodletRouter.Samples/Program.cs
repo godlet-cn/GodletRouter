@@ -19,9 +19,8 @@ namespace GodletRouter.Samples
             server.SetPageErrorHandler(new PageErrorHandler());
 
             //dispatch urls to handlers
-            server.AddHandler("/test", new TestGetHttpHandler(),"Get");
-            server.AddHandler("/test", new TestPostHttpHandler(), "Post");
-            server.AddHandler("/test/child", new TestChildHttpHandler(), "Get");
+            server.AddHandler("/test", new TestHttpHandler());
+            server.AddHandler("/test/child", new TestChildHttpHandler());
 
             // wait for system exit
             while (true)

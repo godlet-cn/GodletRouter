@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace GodletRouter.Samples.Handlers
 {
-    class HomeHttpHandler : IHttpHandler
+    class HomeHttpHandler : AbstractHttpHandler
     {
-        public void Service(HttpListenerRequest request, HttpListenerResponse response)
+        public override void Service(HttpListenerRequest request, HttpListenerResponse response)
         {
             string responseString =
                 @"<html>
@@ -18,12 +18,7 @@ namespace GodletRouter.Samples.Handlers
                     <body><h2>Thank you for using GodletRouter</h2></body>
                   </html>";
 
-            response.ContentLength64 = Encoding.UTF8.GetByteCount(responseString);
-            response.ContentType = "text/html; charset=UTF-8";
-            Stream output = response.OutputStream;
-            StreamWriter writer = new StreamWriter(output);
-            writer.Write(responseString);
-            writer.Close();
+            this.WriteString(response,responseString);
         }
     }
 }

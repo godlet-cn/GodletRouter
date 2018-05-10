@@ -9,9 +9,28 @@ namespace GodletRouter
 {
     public class Route
     {
-        public bool Match(HttpListenerRequest request, RouteMatch match)
+        private IHttpHandler handler;
+        private string pattern;
+
+        public Route(string pattern, IHttpHandler handler)
         {
-            return true;
+            this.pattern = pattern;
+            this.handler = handler;
+        }
+
+        public IHttpHandler Handler
+        {
+            get
+            {
+                return handler;
+            }
+        }
+
+        public string Pattern
+        {
+            get {
+                return this.pattern;
+            }
         }
     }
 }

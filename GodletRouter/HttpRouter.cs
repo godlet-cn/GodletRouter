@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 
 namespace GodletRouter
@@ -39,21 +38,15 @@ namespace GodletRouter
 
         #endregion
 
-        public Route HandleFunc(string path, Action<HttpListenerRequest, HttpListenerResponse> f)
+        public Route HandleFunc(string path, IHttpHandler handler)
         {
-            return this.NewRoute();
-        }
-
-        public Route NewRoute()
-        {
-            Route route = new Route();
-
+            Route route = new Route(path, handler);
             this.routes.Add(route);
             return route;
         }
 
         /// <summary>
-        /// HttpRouter.Service dispatches the handler registered in the matched route.
+        ///  dispatches the request to the handler whose pattern most closely matches the request URL.
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
@@ -67,42 +60,80 @@ namespace GodletRouter
                 }
             }
 
-            RouteMatch match = new RouteMatch();
-            IHttpHandler handler = null;
-
-            if (this.Match(request, match))
-            {
-                handler = match.Handler;
-            }
+            IHttpHandler handler = Handler(request);
 
             if (handler == null)
             {
                 handler = this.NotFoundHandler;
             }
+
             if (handler != null)
             {
+                foreach (var mw in this.middleWares)
+                {
+                    handler = mw.Middleware(handler);
+                }
                 handler.Service(request, response);
             }
         }
 
-        private bool Match(HttpListenerRequest request, RouteMatch match)
+        public IHttpHandler Handler(HttpListenerRequest request)
         {
+            string host = request.UserHostAddress;
+            string path = request.Url.AbsolutePath;
+
+            IHttpHandler handler;
+            string pattern;
+            this.handler(host, path,out handler,out pattern);
+            return handler;
+        }
+
+        private void handler(string host, string path,out IHttpHandler handler,out string pattern)
+        {
+            handler = null;
+            pattern = "";
+
+            // Check for exact match first.
             foreach (var route in this.routes)
             {
-                if (route.Match(request, match))
-                {
-                    // Build middleware chain if no error was found
-                    if (match.MatchErr == null)
-                    {
-                        foreach (var mw in this.middleWares)
-                        {
-                            match.Handler = mw.Middleware(match.Handler);
-                        }
-                    }
-                    return true;
+                if (route.Pattern == path) {
+                    handler= route.Handler;
+                    pattern = route.Pattern;
                 }
             }
-            return false;
+
+            // Check for longest valid match.
+            int maxLen = 0;
+            IHttpHandler h=null;
+            foreach (var route in this.routes)
+            {
+                if (!pathMatch(route.Pattern, path))
+                {
+                    continue;
+                }
+                if (h == null || route.Pattern.Length > maxLen)
+                {
+                    maxLen = route.Pattern.Length;
+                    h = route.Handler;
+                    pattern = route.Pattern;
+                }
+            }
+        }
+
+        private bool pathMatch(string pattern, string path)
+        {
+            if (pattern.Length == 0)
+            {
+                // should not happen
+                return false;
+            }
+
+            int n = pattern.Length;
+            if (pattern[n - 1] != '/')
+            {
+                return pattern == path;
+            }
+            return path.Length >= n && path.Substring(0, n) == pattern;
         }
     }
 }

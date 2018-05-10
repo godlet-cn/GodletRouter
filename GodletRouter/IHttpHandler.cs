@@ -16,5 +16,4 @@ namespace GodletRouter
         void Service(HttpListenerRequest request,HttpListenerResponse response);
     }
 
-
 }

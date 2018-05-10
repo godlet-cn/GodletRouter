@@ -47,9 +47,9 @@ namespace GodletRouter.Samples
         /// <param name="path"></param>
         /// <param name="handler"></param>
         /// <param name="method"></param>
-        public void AddHandler(string path,IHttpHandler handler,string method)
+        public void AddHandler(string path,IHttpHandler handler)
         {
-            router.HandleFunc(path, handler.Service);
+            router.HandleFunc(path, handler);
         }
 
         /// <summary>
