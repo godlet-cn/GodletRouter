@@ -55,6 +55,7 @@
     <ProjectReference Include="..\GodletRouter\GodletRouter.csproj">
       <Project>{fbd22b22-83af-4851-b676-89001d054658}</Project>
       <Name>GodletRouter</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

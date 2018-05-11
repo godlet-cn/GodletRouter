@@ -1,4 +1,6 @@
-﻿namespace GodletRouter
+﻿using System.Net;
+
+namespace GodletRouter
 {
     public class Route
     {
@@ -21,9 +23,36 @@
 
         public string Pattern
         {
-            get {
+            get
+            {
                 return this.pattern;
             }
+        }
+
+        internal bool Match(HttpListenerRequest request)
+        {
+            IHttpHandler handler;
+            string pattern;
+
+            string path = request.Url.AbsolutePath;
+            if (this.Pattern == path)
+            {
+                handler = this.Handler;
+                pattern = this.Pattern;
+                return true;
+            }
+
+            return pathMatch(this.Pattern, path);
+        }
+
+        private bool pathMatch(string pattern, string path)
+        {
+            int n = pattern.Length;
+            if (pattern[n - 1] != '/')
+            {
+                return pattern == path;
+            }
+            return path.Length >= n && path.Substring(0, n) == pattern;
         }
     }
 }

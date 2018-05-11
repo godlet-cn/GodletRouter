@@ -78,7 +78,7 @@ When you run this application, you can try it now:
 
 3. Test "Post" method
 
-    curl -X POST http://localhost:4006/test/ -d 'FOO'
+    curl -X POST http://localhost:4006/test -d 'FOO'
 
 4. Test a subsidiary url request
 

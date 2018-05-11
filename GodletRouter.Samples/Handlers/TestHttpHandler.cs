@@ -24,6 +24,5 @@ namespace GodletRouter.Samples.Handlers
 
             this.WriteString(response, responseString);
         }
-
     }
 }

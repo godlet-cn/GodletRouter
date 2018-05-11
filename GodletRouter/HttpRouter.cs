@@ -13,8 +13,14 @@ namespace GodletRouter
             this.NotFoundHandler = new DefaultNotFoundHandler();
         }
 
+        /// <summary>
+        /// Root path handler
+        /// </summary>
         public IHttpHandler HomeHandler { get; set; }
 
+        /// <summary>
+        /// The handler when none of the registed handlers can handle the request
+        /// </summary>
         public IHttpHandler NotFoundHandler { get; set; }
 
         private List<Route> routes;
@@ -40,6 +46,12 @@ namespace GodletRouter
 
         #endregion
 
+        /// <summary>
+        /// Adds a http handler
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
         public Route HandleFunc(string path, IHttpHandler handler)
         {
             lock (mutex)
@@ -51,7 +63,7 @@ namespace GodletRouter
         }
 
         /// <summary>
-        ///  dispatches the request to the handler whose pattern most closely matches the request URL.
+        ///  Dispatches the request to the handler whose pattern most closely matches the request URL.
         /// </summary>
         /// <param name="request"></param>
         /// <param name="response"></param>
@@ -65,7 +77,7 @@ namespace GodletRouter
                 }
             }
 
-            IHttpHandler handler = Handler(request);
+            IHttpHandler handler = Match(request);
 
             if (handler == null)
             {
@@ -78,71 +90,25 @@ namespace GodletRouter
                 {
                     handler = mw.Middleware(handler);
                 }
+
                 handler.Service(request, response);
             }
         }
 
-        public IHttpHandler Handler(HttpListenerRequest request)
+        private IHttpHandler Match(HttpListenerRequest request)
         {
-            string host = request.UserHostAddress;
-            string path = request.Url.AbsolutePath;
-
-            IHttpHandler handler;
-            string pattern;
-            this.handler(host, path,out handler,out pattern);
-            return handler;
-        }
-
-        private void handler(string host, string path,out IHttpHandler handler,out string pattern)
-        {
-            handler = null;
-            pattern = "";
-
-            // Check for exact match first.
-            foreach (var route in this.routes)
-            {
-                if (route.Pattern == path) {
-                    handler= route.Handler;
-                    pattern = route.Pattern;
-                }
-            }
-
-            // Check for longest valid match.
-            int maxLen = 0;
-            IHttpHandler h=null;
-
             lock (mutex)
             {
                 foreach (var route in this.routes)
                 {
-                    if (!pathMatch(route.Pattern, path))
+                    if (route.Match(request))
                     {
-                        continue;
-                    }
-                    if (h == null || route.Pattern.Length > maxLen)
-                    {
-                        maxLen = route.Pattern.Length;
-                        h = route.Handler;
-                        pattern = route.Pattern;
+                        return route.Handler;
                     }
                 }
+                return null;
             }
         }
 
-        private bool pathMatch(string pattern, string path)
-        {
-            if (pattern.Length == 0)
-            {
-                // should not happen
-                return false;
-            }
-
-            int n = pattern.Length;
-            if (pattern[n - 1] != '/')
-            {
-                return pattern == path;
-            }
-            return path.Length >= n && path.Substring(0, n) == pattern;
-        }
     }
 }

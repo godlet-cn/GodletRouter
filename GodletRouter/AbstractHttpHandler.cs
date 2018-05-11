@@ -18,7 +18,6 @@ namespace GodletRouter
         public virtual void Service(HttpListenerRequest req, HttpListenerResponse resp)
         {
             string method = req.HttpMethod.ToUpper();
-            
             if (method.Equals(METHOD_GET))
             {
                 doGet(req, resp);
@@ -88,7 +87,7 @@ namespace GodletRouter
             
         }
 
-        protected void WriteString(HttpListenerResponse resp,string responseString)
+        protected virtual void WriteString(HttpListenerResponse resp,string responseString)
         {
             if (resp.ContentLength64 != 0) return;
             resp.ContentLength64 = Encoding.UTF8.GetByteCount(responseString);
