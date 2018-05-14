@@ -9,6 +9,11 @@ namespace GodletRouter
 
         private HttpListener httpListener;
 
+        public HttpServer()
+        {
+            router = new HttpRouter();
+        }
+
         /// <summary>
         /// Start http server
         /// </summary>
@@ -17,10 +22,6 @@ namespace GodletRouter
             string conn = getConnectionString(hostname, port);
             try
             {
-                Console.WriteLine("Initializing HTTP server");
-                Console.WriteLine("Listening at:" + conn);
-                router = new HttpRouter();
-                
                 httpListener = new HttpListener();
                 httpListener.Prefixes.Add(conn);
                 httpListener.Start();
